@@ -74,7 +74,7 @@ add_action( 'add_meta_boxes', function() {
         <p>¿Dónde quieres inyectar este código?</p>
         <select name="mc_hook" style="width:100%;">
             <?php foreach ( $hooks as $value => $label ) : ?>
-                <option value="<​?php echo esc_attr($value); ?>" <?php selected( $current_hook, $value ); ?>><?php echo esc_html($label); ?></option>
+                <option value="<?php echo esc_attr($value); ?>" <?php selected( $current_hook, $value ); ?>><?php echo esc_html($label); ?></option>
             <?php endforeach; ?>
         </select>
         <?php
