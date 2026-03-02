@@ -26,25 +26,24 @@ add_action( 'admin_menu', function() {
 function mc_build_category_plugin_code( WP_Term $cat, array $snippets ) {
 
     $plugin_name = $cat->name;
-    // Extraemos la descripción real de la categoría de WordPress
-    $description = ! empty( $cat->description ) ? $cat->description : 'Snippets pertenecientes a la categoría ' . $cat->name . '.';
+    $description = ! empty( $cat->description ) ? $cat->description : 'Snippets de la categoría ' . $cat->name . '.';
+    $autor       = get_term_meta( $cat->term_id, 'mc_cat_autor', true ) ?: 'Manuel Cerón';
+    $version     = get_term_meta( $cat->term_id, 'mc_cat_version', true ) ?: '0.1.0';
 
     $lines = [];
 
-    // Header de plugin
     $lines[] = '<?php';
     $lines[] = '/**';
     $lines[] = ' * Plugin Name: ' . $plugin_name;
     $lines[] = ' * Description: ' . $description;
-    $lines[] = ' * Version: 0.1.0';
-    $lines[] = ' * Author: Manuel Cerón';
-    $lines[] = ' * License: GPL2';
+    $lines[] = ' * Version:     ' . $version;
+    $lines[] = ' * Author:      ' . $autor;
+    $lines[] = ' * License:     GPL2';
     $lines[] = ' */';
     $lines[] = '';
     $lines[] = "if ( ! defined( 'ABSPATH' ) ) exit;";
     $lines[] = '';
 
-    // Snippets
     foreach ( $snippets as $snippet ) {
 
         $hook   = get_post_meta( $snippet->ID, '_mc_hook', true ) ?: 'wp_footer';
@@ -52,23 +51,15 @@ function mc_build_category_plugin_code( WP_Term $cat, array $snippets ) {
         $titulo = $snippet->post_title;
         $code   = $snippet->post_content;
 
-        // Comentario de bloque para identificar el snippet
         $lines[] = '// Snippet: ' . $titulo . ' (ESTADO: ' . strtoupper($estado) . ', Hook: ' . $hook . ')';
 
-        // Limpieza de etiquetas <br /> que WordPress a veces inserta en el editor
-        $clean_code = str_replace( array('<br />', '<br>', '<br/>'), "\n", $code );
-
-        // Escapamos comillas simples para el echo PHP
-        $content_for_php = str_replace(
-            ["\\", "'"],
-            ["\\\\", "\\'"],
-            $clean_code
-        );
+        $clean_code      = str_replace( ['<br />', '<br>', '<br/>'], "\n", $code );
+        $content_for_php = str_replace( ["\\", "'"], ["\\\\", "\\'"], $clean_code );
 
         $lines[] = "add_action('{$hook}', function() {";
         $lines[] = "    echo '{$content_for_php}';";
         $lines[] = "});";
-        $lines[] = ''; // línea en blanco entre snippets
+        $lines[] = '';
     }
 
     return implode("\n", $lines);

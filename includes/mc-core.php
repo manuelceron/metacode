@@ -128,3 +128,57 @@ add_action( 'wp', function() {
         });
     }
 });
+/**
+ * 5. CAMPOS EXTRA EN TAXONOMÍA mc_categoria (Autor y Versión)
+ */
+
+// --- Formulario: AÑADIR nueva categoría (Pantalla principal de Categorías) ---
+add_action( 'mc_categoria_add_form_fields', function() {
+    ?>
+    <div class="form-field">
+        <label for="mc_cat_autor">Autor</label>
+        <input type="text" name="mc_cat_autor" id="mc_cat_autor" value="" placeholder="Ej: Manuel Cerón" />
+        <p class="description">Autor responsable de este grupo de snippets.</p>
+    </div>
+    <div class="form-field">
+        <label for="mc_cat_version">Versión</label>
+        <input type="text" name="mc_cat_version" id="mc_cat_version" value="" placeholder="Ej: 1.0.0" />
+        <p class="description">Versión del "plugin virtual".</p>
+    </div>
+    <?php
+});
+
+// --- Formulario: EDITAR categoría (Pantalla de edición individual) ---
+add_action( 'mc_categoria_edit_form_fields', function( $term ) {
+    // Recuperamos los valores guardados o dejamos vacío si no existen
+    $autor   = get_term_meta( $term->term_id, 'mc_cat_autor', true );
+    $version = get_term_meta( $term->term_id, 'mc_cat_version', true );
+    ?>
+    <tr class="form-field term-meta-wrap">
+        <th scope="row"><label for="mc_cat_autor">Autor</label></th>
+        <td>
+            <input type="text" name="mc_cat_autor" id="mc_cat_autor" value="<​?php echo esc_attr( $autor ); ?>" />
+            <p class="description">Nombre del autor que aparecerá en el visor.</p>
+        </td>
+    </tr>
+    <tr class="form-field term-meta-wrap">
+        <th scope="row"><label for="mc_cat_version">Versión</label></th>
+        <td>
+            <input type="text" name="mc_cat_version" id="mc_cat_version" value="<​?php echo esc_attr( $version ); ?>" />
+            <p class="description">Versión del conjunto de snippets.</p>
+        </td>
+    </tr>
+    <?php
+});
+
+// --- Guardado de los metadatos ---
+function mc_save_category_meta( $term_id ) {
+    if ( isset( $_POST['mc_cat_autor'] ) ) {
+        update_term_meta( $term_id, 'mc_cat_autor', sanitize_text_field( $_POST['mc_cat_autor'] ) );
+    }
+    if ( isset( $_POST['mc_cat_version'] ) ) {
+        update_term_meta( $term_id, 'mc_cat_version', sanitize_text_field( $_POST['mc_cat_version'] ) );
+    }
+}
+add_action( 'created_mc_categoria', 'mc_save_category_meta' );
+add_action( 'edited_mc_categoria', 'mc_save_category_meta' );
