@@ -157,14 +157,14 @@ add_action( 'mc_categoria_edit_form_fields', function( $term ) {
     <tr class="form-field term-meta-wrap">
         <th scope="row"><label for="mc_cat_autor">Autor</label></th>
         <td>
-            <input type="text" name="mc_cat_autor" id="mc_cat_autor" value="<​?php echo esc_attr( $autor ); ?>" />
+            <input type="text" name="mc_cat_autor" id="mc_cat_autor" value="<?php echo esc_attr( $autor ); ?>" />
             <p class="description">Nombre del autor que aparecerá en el visor.</p>
         </td>
     </tr>
     <tr class="form-field term-meta-wrap">
         <th scope="row"><label for="mc_cat_version">Versión</label></th>
         <td>
-            <input type="text" name="mc_cat_version" id="mc_cat_version" value="<​?php echo esc_attr( $version ); ?>" />
+            <input type="text" name="mc_cat_version" id="mc_cat_version" value="<?php echo esc_attr( $version ); ?>" />
             <p class="description">Versión del conjunto de snippets.</p>
         </td>
     </tr>
