@@ -68,7 +68,7 @@ add_action( 'add_meta_boxes', function() {
             'get_footer'           => 'get_footer - Antes de cargar Footer',
             'comment_form_before'  => 'comment_form_before - Antes de Comentarios',
             'comment_form_after'   => 'comment_form_after - Después de Comentarios',
-            //'wp_enqueue_scripts'   => 'wp_enqueue_scripts - Registro técnico de recursos (Enqueue)',
+            'wp_enqueue_scripts'   => 'wp_enqueue_scripts - Registro técnico de recursos (Enqueue)',
         ];
         ?>
         <p>¿Dónde quieres inyectar este código?</p>
